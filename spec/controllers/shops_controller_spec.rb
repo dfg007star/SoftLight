@@ -76,7 +76,7 @@ RSpec.describe Api::V1::ShopsController, type: :controller do
       expect(json['shop']).to eq([])
     end
 
-    it 'book have status: as sold_out' do
+    it 'book have status: as in_stock' do
       book_second = create(:book, publisher: publisher)
       stock_second = create(:stock, shop: shop, book: book_second, books_stocked: 30, books_sold: 30)
       sold_out = json['shop'][0]['books'][0]['status']
