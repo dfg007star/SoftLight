@@ -1,7 +1,7 @@
 module Api
   module V1
     class ShopsController < ApplicationController
-      def publisher
+      def shops
         stocks = Stock.as_available(params[:publisher_id])
         list = stocks.each_with_object({}) do |item, hash|
           shop = item.shop
@@ -15,7 +15,7 @@ module Api
           shop_data[:books_in_stock] << {
             id: item.book_id,
             title: item.book.title,
-            copies_in_stock: item.books_in_stock
+            copies_in_stock: item.books_stocked
           }
         end
         render json: { shops: list.values
@@ -23,21 +23,26 @@ module Api
                                   .reverse }
       end
 
-      def status
-        stock = Stock.where(shop_id: params[:shop_id])
-        list = stock.each_with_object({}) do |item, hash|
-          shop = item.shop
-          shop_data = hash[shop] ||= {
-            id: shop.id,
-            books: []
-          }
-          shop_data[:books] << {
-            id: item.book_id,
-            title: item.book.title,
-            status: item.book_as_sold
-          }
+      def sell
+        stock = Stock.find_by_shop_id_and_book_id(params[:shop_id], params[:book_id])
+        if stock
+          count = params[:count].to_i
+          if count == 0
+            render json: 'wrong_count'
+          elsif stock.books_stocked < count
+            available = 'available just ' + (stock.books_stocked - stock.books_sold).to_s
+            render json: 'not_in_stock. ' + available
+          else
+            stock.books_sold += count
+            stock.save
+            if stock.save
+              render json:
+                'sells ' + count.to_s
+            end
+          end
+        else
+          render json: 'not_found'
         end
-        render json: { shop: list.values }
       end
     end
   end
