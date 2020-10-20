@@ -8,7 +8,7 @@
 
 ## API:
 
-- /api/v1/publisher/:publisher_id
+- /api/v1/publisher/:publisher_id/shops
 
 #### Show list of shops where related publisher(:publisher_id) book selling
 
@@ -34,30 +34,6 @@
 
 <br>
 
-- /api/v1/shops/:shop_id
+- /api/v1/sell_books?shop_id=1&book_id=1&count=2
 
-#### Show list of books in related shop(:shop_id) and shows books
-
-### status: "sold_out" || "in_stock"
-
-```
-{
-"shop": [
-           {
-                "id": 1,
-                "books": [
-                    {
-                        "id": 1,
-                        "title": "1984",
-                        "status": "sold_out"
-                    },
-                    {
-                        "id": 2,
-                        "title": "Harry Potter",
-                        "status": "in_stock"
-                    }
-                ]
-            }
-        ]
-}
-```
+#### Method sell_books takes params[:shop_id], params[:book_id], params[:count] and return JSON with status.
