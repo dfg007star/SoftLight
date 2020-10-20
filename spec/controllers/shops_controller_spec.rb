@@ -11,7 +11,7 @@ RSpec.describe Api::V1::ShopsController, type: :controller do
 
   describe 'publisher' do
     def json
-      get :publisher, params: { publisher_id: publisher.id }
+      get :shops, params: { publisher_id: publisher.id }
       JSON.parse(response.body)
     end
 
@@ -20,7 +20,7 @@ RSpec.describe Api::V1::ShopsController, type: :controller do
     end
 
     it 'return empty array' do
-      get :publisher, params: { publisher_id: '99' }
+      get :shops, params: { publisher_id: '99' }
       json = JSON.parse(response.body)
       expect(json['shops']).to eq([])
     end
@@ -60,9 +60,9 @@ RSpec.describe Api::V1::ShopsController, type: :controller do
     end
   end
 
-  describe 'status' do
+  describe 'sell_books' do
     def json
-      get :status, params: { shop_id: shop.id }
+      patch :sell_books, params: { shop_id: shop.id, book_id: book.id, count: 10 }
       JSON.parse(response.body)
     end
 
@@ -70,24 +70,18 @@ RSpec.describe Api::V1::ShopsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it 'return empty array' do
-      get :status, params: { shop_id: '99' }
-      json = JSON.parse(response.body)
-      expect(json['shop']).to eq([])
-    end
+    # it 'book have status: as in_stock' do
+    #   book_second = create(:book, publisher: publisher)
+    #   stock_second = create(:stock, shop: shop, book: book_second, books_stocked: 30, books_sold: 30)
+    #   sold_out = json['shop'][0]['books'][0]['status']
+    #   expect(sold_out).to eq('in_stock')
+    # end
 
-    it 'book have status: as in_stock' do
-      book_second = create(:book, publisher: publisher)
-      stock_second = create(:stock, shop: shop, book: book_second, books_stocked: 30, books_sold: 30)
-      sold_out = json['shop'][0]['books'][0]['status']
-      expect(sold_out).to eq('in_stock')
-    end
-
-    it 'book have status: as sold_out' do
-      book_second = create(:book, publisher: publisher)
-      stock_second = create(:stock, shop: shop, book: book_second, books_stocked: 30, books_sold: 30)
-      sold_out = json['shop'][0]['books'][1]['status']
-      expect(sold_out).to eq('sold_out')
-    end
+    # it 'book have status: as sold_out' do
+    #   book_second = create(:book, publisher: publisher)
+    #   stock_second = create(:stock, shop: shop, book: book_second, books_stocked: 30, books_sold: 30)
+    #   sold_out = json['shop'][0]['books'][1]['status']
+    #   expect(sold_out).to eq('sold_out')
+    # end
   end
 end

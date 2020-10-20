@@ -5,6 +5,5 @@ RSpec.describe Book, type: :model do
     it { is_expected.to belong_to(:publisher) }
 
     it { should validate_presence_of(:title) }
-    it { should validate_presence_of(:publisher_id) }
   end
 end

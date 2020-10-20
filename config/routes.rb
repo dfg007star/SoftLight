@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       resources :publisher do
         get 'shops' => 'shops#shops'
       end
-      patch 'sell' => 'shops#sell'
+      patch 'sell_books' => 'shops#sell_books'
     end
   end
 end

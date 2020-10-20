@@ -23,12 +23,12 @@ module Api
                                   .reverse }
       end
 
-      def sell
+      def sell_books
         stock = Stock.find_by_shop_id_and_book_id(params[:shop_id], params[:book_id])
         if stock
           count = params[:count].to_i
           if count == 0
-            render json: 'wrong_count'
+            render json: 'can`t sell 0'
           elsif stock.books_stocked < count
             available = 'available just ' + (stock.books_stocked - stock.books_sold).to_s
             render json: 'not_in_stock. ' + available
